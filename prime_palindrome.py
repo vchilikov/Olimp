@@ -11,4 +11,4 @@ def primes(n):
     return sieve
 
 
-primes(1000000)
+primes(10000000)
