@@ -1,0 +1,5 @@
+n = int(input())
+a = list(map(int, input().split()))
+max_a = max(a[i + 1] - a[i] for i in range(n - 1))
+min_a = min(a[i + 2] - a[i] for i in range(n - 2))
+print(max(max_a, min_a))
