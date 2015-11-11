@@ -1,7 +1,15 @@
-a = [1, 2, 3, 4, 5]
-i = 3
-j = 4
-print(a[:i] + a[i:j + 1][::-1] + a[j + 1:])
-z = 1j + 4
-z = z ** 2
-print(z.real, z.imag)
+class Student:
+    city = "Москва"
+
+    def __init__(self, name, year):
+        self.name = name
+        self.year = year
+
+    def print_info(self):
+        print(self.name, self.year)
+
+v = Student('Вася', 19)
+p = Student('Петя', 21)
+Student.city = 'Питер'
+v.print_info()
+p.print_info()
