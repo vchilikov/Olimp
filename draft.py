@@ -1,15 +1,39 @@
-class Student:
-    city = "Москва"
+def decorator_maker(name):
+    def decorator(f):
+        def wrapper(self, *args, **kwargs):
+            print('begin ' + name)
+            res = f(self, *args, **kwargs)
+            print('end' + name)
+            return res
+        return wrapper
+    return decorator
 
-    def __init__(self, name, year):
-        self.name = name
-        self.year = year
+class A:
+    @decorator_maker('__init__')
+    def __init__(self):
+        print('A')
 
+    @decorator_maker('print_info')
     def print_info(self):
-        print(self.name, self.year)
+        return 'print_info'
 
-v = Student('Вася', 19)
-p = Student('Петя', 21)
-Student.city = 'Питер'
-v.print_info()
-p.print_info()
+a = A()
+print(a.print_info())
+
+# class Student:
+#     __obj = None
+#
+#     def __new__(cls, *args, **kwargs):
+#         if cls.__obj is None:
+#             cls.__obj = super().__new__(cls)
+#         return cls.__obj
+#
+#     def __init__(self, name):
+#         self.name = name
+#
+#
+# v = Student("Вася")
+# p = Student('Петя')
+#
+# print(v.name)
+# print(p.name)
