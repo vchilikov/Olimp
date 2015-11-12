@@ -9,5 +9,5 @@ for i in range(n):
         s.remove(-r)
     else:
         res += 1
-    res = max(res, len(s))
+    res = max(res,len(s))
 print(res)
