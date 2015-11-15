@@ -1,24 +1,27 @@
-def decorator_maker(name):
-    def decorator(f):
-        def wrapper(self, *args, **kwargs):
-            print('begin ' + name)
-            res = f(self, *args, **kwargs)
-            print('end' + name)
-            return res
-        return wrapper
-    return decorator
 
-class A:
-    @decorator_maker('__init__')
-    def __init__(self):
-        print('A')
 
-    @decorator_maker('print_info')
-    def print_info(self):
-        return 'print_info'
 
-a = A()
-print(a.print_info())
+# def decorator_maker(name):
+#     def decorator(f):
+#         def wrapper(self, *args, **kwargs):
+#             print('begin ' + name)
+#             res = f(self, *args, **kwargs)
+#             print('end' + name)
+#             return res
+#         return wrapper
+#     return decorator
+#
+# class A:
+#     @decorator_maker('__init__')
+#     def __init__(self):
+#         print('A')
+#
+#     @decorator_maker('print_info')
+#     def print_info(self):
+#         return 'print_info'
+#
+# a = A()
+# print(a.print_info())
 
 # class Student:
 #     __obj = None
