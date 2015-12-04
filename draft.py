@@ -1,29 +1,30 @@
 import random
 import time
+import gc
 a = [random.randint(0, 10**7) for _ in range(10**7)]
-b = a[:]
+
 print('------------------')
-t = time.time()
-res = []
-a.sort()
-s = set()
-k = 0
-while len(s) < 5:
-    s.add(a[k])
-    k += 1
-print(time.time() - t)
-print(sorted(s))
+# t = time.time()
+# res = []
+# a.sort()
+# s = set()
+# k = 0
+# while len(s) < 1000:
+#     s.add(a[k])
+#     k += 1
+# print(time.time() - t)
+# print(sorted(s))
 
 t = time.time()
 s = set()
 k = 0
-while len(s) < 5:
-    s.add(b[k])
+while len(s) < 10:
+    s.add(a[k])
     k += 1
 max_s = max(s)
-for i in range(k, len(b)):
-    if b[i] < max_s and b[i] not in s:
-        s.add(b[i])
+for el in a:
+    if el < max_s and el not in s:
+        s.add(el)
         s.remove(max_s)
         max_s = max(s)
 print(time.time() - t)
