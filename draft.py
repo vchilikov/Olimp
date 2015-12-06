@@ -1,9 +1,14 @@
-import random
-import time
-import gc
-a = [random.randint(0, 10**7) for _ in range(10**7)]
+a = 5
+print(isinstance(a, int))
+print(issubclass(bool, int))
 
-print('------------------')
+
+# import random
+# import time
+# import gc
+# a = [random.randint(0, 10**7) for _ in range(10**7)]
+#
+# print('------------------')
 # t = time.time()
 # res = []
 # a.sort()
@@ -14,21 +19,21 @@ print('------------------')
 #     k += 1
 # print(time.time() - t)
 # print(sorted(s))
-
-t = time.time()
-s = set()
-k = 0
-while len(s) < 10:
-    s.add(a[k])
-    k += 1
-max_s = max(s)
-for el in a:
-    if el < max_s and el not in s:
-        s.add(el)
-        s.remove(max_s)
-        max_s = max(s)
-print(time.time() - t)
-print(sorted(s))
+#
+# t = time.time()
+# s = set()
+# k = 0
+# while len(s) < 10:
+#     s.add(a[k])
+#     k += 1
+# max_s = max(s)
+# for el in a:
+#     if el < max_s and el not in s:
+#         s.add(el)
+#         s.remove(max_s)
+#         max_s = max(s)
+# print(time.time() - t)
+# print(sorted(s))
 
 # import random
 #
@@ -51,42 +56,42 @@ print(sorted(s))
 # print('NO' if res == n or sum < 0 else res + 1)
 
 
-    # def decorator_maker(name):
-    #     def decorator(f):
-    #         def wrapper(self, *args, **kwargs):
-    #             print('begin ' + name)
-    #             res = f(self, *args, **kwargs)
-    #             print('end' + name)
-    #             return res
-    #         return wrapper
-    #     return decorator
-    #
-    # class A:
-    #     @decorator_maker('__init__')
-    #     def __init__(self):
-    #         print('A')
-    #
-    #     @decorator_maker('print_info')
-    #     def print_info(self):
-    #         return 'print_info'
-    #
-    # a = A()
-    # print(a.print_info())
+# def decorator_maker(name):
+#     def decorator(f):
+#         def wrapper(self, *args, **kwargs):
+#             print('begin ' + name)
+#             res = f(self, *args, **kwargs)
+#             print('end' + name)
+#             return res
+#         return wrapper
+#     return decorator
+#
+# class A:
+#     @decorator_maker('__init__')
+#     def __init__(self):
+#         print('A')
+#
+#     @decorator_maker('print_info')
+#     def print_info(self):
+#         return 'print_info'
+#
+# a = A()
+# print(a.print_info())
 
-    # class Student:
-    #     __obj = None
-    #
-    #     def __new__(cls, *args, **kwargs):
-    #         if cls.__obj is None:
-    #             cls.__obj = super().__new__(cls)
-    #         return cls.__obj
-    #
-    #     def __init__(self, name):
-    #         self.name = name
-    #
-    #
-    # v = Student("Вася")
-    # p = Student('Петя')
-    #
-    # print(v.name)
-    # print(p.name)
+# class Student:
+#     __obj = None
+#
+#     def __new__(cls, *args, **kwargs):
+#         if cls.__obj is None:
+#             cls.__obj = super().__new__(cls)
+#         return cls.__obj
+#
+#     def __init__(self, name):
+#         self.name = name
+#
+#
+# v = Student("Вася")
+# p = Student('Петя')
+#
+# print(v.name)
+# print(p.name)
