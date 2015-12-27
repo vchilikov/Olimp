@@ -1,8 +1,35 @@
-class Table:
+class Record:
     pass
 
-class MyTable(Table):
-    pass
+
+class Integer(Record):
+    def sql(self):
+        return 'integer'
+
+
+class Str(Record):
+    def __init__(self, size):
+        self.size = size
+
+    def sql(self):
+        return 'varchar(%d)' % self.size
+
+
+class MyTable:
+    height = Integer()
+    width = Integer()
+    path = Str(128)
+
+    @classmethod
+    def sql(cls):
+        attrs = [(key, val) for key, val in cls.__dict__.items() if isinstance(val, Record)]
+        retString = 'CREATE TABLE %s (\n' % cls.__name__.lower()
+        retString += ',\n'.join(['      %s %s' % (x, y.sql()) for x, y in attrs])
+        retString += '\n)'
+        return retString
+
+
+print(MyTable.sql())
 
 # class FixAttr(type):
 #     def __setattr__(self, key, value):
