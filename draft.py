@@ -1,35 +1,56 @@
-class Record:
-    pass
+insert = """
+INSERT INTO category(
+            id, name, parent_category_id)
+    VALUES ({0}, '{1}', {2});
+"""
+
+with open('key.txt', 'r') as f:
+    parent_id = 0
+    id = 0
+    for el in f:
+        el = el.strip()
+        if el == '':
+            continue
+        id += 1
+        if el[0] == '*':
+            parent_id = id
+            print(insert.format(id, el[1:], 'null'))
+        else:
+            print(insert.format(id, el, parent_id))
 
 
-class Integer(Record):
-    def sql(self):
-        return 'integer'
-
-
-class Str(Record):
-    def __init__(self, size):
-        self.size = size
-
-    def sql(self):
-        return 'varchar(%d)' % self.size
-
-
-class MyTable:
-    height = Integer()
-    width = Integer()
-    path = Str(128)
-
-    @classmethod
-    def sql(cls):
-        attrs = [(key, val) for key, val in cls.__dict__.items() if isinstance(val, Record)]
-        retString = 'CREATE TABLE %s (\n' % cls.__name__.lower()
-        retString += ',\n'.join(['      %s %s' % (x, y.sql()) for x, y in attrs])
-        retString += '\n)'
-        return retString
-
-
-print(MyTable.sql())
+# class Record:
+#     pass
+#
+#
+# class Integer(Record):
+#     def sql(self):
+#         return 'integer'
+#
+#
+# class Str(Record):
+#     def __init__(self, size):
+#         self.size = size
+#
+#     def sql(self):
+#         return 'varchar(%d)' % self.size
+#
+#
+# class MyTable:
+#     height = Integer()
+#     width = Integer()
+#     path = Str(128)
+#
+#     @classmethod
+#     def sql(cls):
+#         attrs = [(key, val) for key, val in cls.__dict__.items() if isinstance(val, Record)]
+#         retString = 'CREATE TABLE %s (\n' % cls.__name__.lower()
+#         retString += ',\n'.join(['      %s %s' % (x, y.sql()) for x, y in attrs])
+#         retString += '\n)'
+#         return retString
+#
+#
+# print(MyTable.sql())
 
 # class FixAttr(type):
 #     def __setattr__(self, key, value):
