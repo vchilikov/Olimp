@@ -1,0 +1,5 @@
+n, m = map(int, input().split())
+a = list(map(int, input().split()))
+b = map(int, input().split())
+v = max(max(a), 2 * min(a))
+print(v if v < min(b) else -1)
