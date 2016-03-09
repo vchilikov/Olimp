@@ -1,22 +1,29 @@
-insert = """
-INSERT INTO category(
-            id, name, parent_category_id)
-    VALUES ({0}, '{1}', {2});
-"""
+a = []
 
-with open('key.txt', 'r') as f:
-    parent_id = 0
-    id = 0
-    for el in f:
-        el = el.strip()
-        if el == '':
-            continue
-        id += 1
-        if el[0] == '*':
-            parent_id = id
-            print(insert.format(id, el[1:], 'null'))
-        else:
-            print(insert.format(id, el, parent_id))
+print(a.__iter__())
+print(a.__iter__())
+print(iter(a))
+print(iter(a))
+
+# insert = """
+# INSERT INTO category(
+#             id, name, parent_category_id)
+#     VALUES ({0}, '{1}', {2});
+# """
+#
+# with open('key.txt', 'r') as f:
+#     parent_id = 0
+#     id = 0
+#     for el in f:
+#         el = el.strip()
+#         if el == '':
+#             continue
+#         id += 1
+#         if el[0] == '*':
+#             parent_id = id
+#             print(insert.format(id, el[1:], 'null'))
+#         else:
+#             print(insert.format(id, el, parent_id))
 
 
 # class Record:
