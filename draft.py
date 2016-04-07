@@ -1,10 +1,55 @@
-a = []
+from collections import Counter
+from random import randint, seed
+from time import time
 
-print(a.__iter__())
-print(a.__iter__())
-print(iter(a))
-print(iter(a))
+t = time()
+n = 40000
 
+d = []
+c = Counter()
+seed()
+for i in range(n):
+    s = set()
+    while len(s) < 10:
+        s.add(randint(0, 300000))
+    d.append(s)
+
+    for el in s:
+        c[el] += 1
+minus = set()
+for el in c:
+    if c[el] <= 1:
+        minus.add(el)
+print(len(minus))
+
+#
+# res = []
+# for i in range(n - 1):
+#     if i % 1000 == 0:
+#         print(i, res)
+#     if d[i] is None:
+#         continue
+#     group = []
+#     for j in range(i + 1, n):
+#         if d[j] and len(d[i].intersection(d[j])) >= 3:
+#             group.append(j)
+#             d[j] = None
+#     if group:
+#         group.append(i)
+#         res.append(group)
+
+# print(d)
+# print(res)
+print(time() - t)
+
+
+# a = []
+#
+# print(a.__iter__())
+# print(a.__iter__())
+# print(iter(a))
+# print(iter(a))
+#
 # insert = """
 # INSERT INTO category(
 #             id, name, parent_category_id)
