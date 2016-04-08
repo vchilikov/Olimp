@@ -1,46 +1,122 @@
-from collections import Counter
 from random import randint, seed
 from time import time
 
-t = time()
-n = 40000
 
-d = []
-c = Counter()
+def var1(a, power):
+    res = []
+    for i in range(len(a) - 1):
+        if i % 1000 == 0:
+            print(i, res)
+        if a[i] is None:
+            continue
+        group = []
+        for j in range(i + 1, len(a)):
+            if a[j] and len(a[i].intersection(a[j])) >= power:
+                group.append(j)
+                a[j] = None
+        if group:
+            group.append(i)
+            res.append(group)
+    return res
+
+
+def soft_clusterization(a, power):
+    b = [set() for i in range(len(a))]
+
+    for i in range(len(a)):
+        for el in a[i]:
+            b[el].add(i)
+
+    res = []
+    for i in range(len(a) - 1):
+        if i % 1000 == 0:
+            print(i, res)
+        if a[i] is None:
+            continue
+
+        s = set()
+        for url in a[i]:
+            s.update(b[url])
+
+        group = []
+        for j in s:
+            if j > i and a[j] and len(a[i].intersection(a[j])) >= power:
+                group.append(j)
+                a[j] = None
+        if group:
+            group.append(i)
+            res.append(group)
+    return res
+
+
+def hard_clusterization(a, power):
+    b = [set() for i in range(len(a))]
+
+    for i in range(len(a)):
+        for el in a[i]:
+            b[el].add(i)
+
+    res = dict()
+    for i in range(len(a) - 1):
+        if i % 1000 == 0:
+            print(i, res)
+
+        s = set()
+        for url in a[i]:
+            s.update(b[url])
+
+        for j in s:
+            if j > i:
+                intersect = a[i].intersection(a[j])
+                if len(intersect) >= power:
+                    urls = tuple(sorted(intersect))
+                    if urls in res:
+                        res[urls].update({i, j})
+                    else:
+                        res[urls] = {i, j}
+    return res
+
+
+n = 100000
+power = 4
+a = []
+
 seed()
-for i in range(n):
+for _ in range(n):
     s = set()
     while len(s) < 10:
-        s.add(randint(0, 300000))
-    d.append(s)
+        s.add(randint(0, 10000 - 1))
+    a.append(s)
 
-    for el in s:
-        c[el] += 1
-minus = set()
-for el in c:
-    if c[el] <= 1:
-        minus.add(el)
-print(len(minus))
-
-#
-# res = []
-# for i in range(n - 1):
-#     if i % 1000 == 0:
-#         print(i, res)
-#     if d[i] is None:
-#         continue
-#     group = []
-#     for j in range(i + 1, n):
-#         if d[j] and len(d[i].intersection(d[j])) >= 3:
-#             group.append(j)
-#             d[j] = None
-#     if group:
-#         group.append(i)
-#         res.append(group)
-
-# print(d)
-# print(res)
+print('-----------------------')
+# c = a.copy()
+# t = time()
+# print(var1(c, power))
+# print(time() - t)
+print('-----------------------')
+c = a.copy()
+t = time()
+print(soft_clusterization(c, power))
 print(time() - t)
+print('-----------------------')
+c = a.copy()
+t = time()
+print(hard_clusterization(c, power))
+print(time() - t)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # a = []
@@ -71,7 +147,7 @@ print(time() - t)
 #             print(insert.format(id, el, parent_id))
 
 
-# class Record:
+# class Record:b = a[:]
 #     pass
 #
 #
