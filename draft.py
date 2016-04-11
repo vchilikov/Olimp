@@ -74,10 +74,18 @@ def hard_clusterization(a, power):
                         res[urls].update({i, j})
                     else:
                         res[urls] = {i, j}
-    return res
 
+    print(res)
+    result = dict()
+    for key, value in res.items():
+        len_key = len(key)
+        if len_key in result:
+            result[len_key].update({key: value})
+        else:
+            result[len_key] = {key: value}
+    return result
 
-n = 100000
+n = 100
 power = 4
 a = []
 
@@ -85,7 +93,7 @@ seed()
 for _ in range(n):
     s = set()
     while len(s) < 10:
-        s.add(randint(0, 10000 - 1))
+        s.add(randint(0, n - 1))
     a.append(s)
 
 print('-----------------------')
