@@ -1,116 +1,129 @@
 from random import randint, seed
-from time import time
-
-
-def var1(a, power):
-    res = []
-    for i in range(len(a) - 1):
-        if i % 1000 == 0:
-            print(i, res)
-        if a[i] is None:
-            continue
-        group = []
-        for j in range(i + 1, len(a)):
-            if a[j] and len(a[i].intersection(a[j])) >= power:
-                group.append(j)
-                a[j] = None
-        if group:
-            group.append(i)
-            res.append(group)
-    return res
-
-
-def soft_clusterization(a, power):
-    b = [set() for i in range(len(a))]
-
-    for i in range(len(a)):
-        for el in a[i]:
-            b[el].add(i)
-
-    res = []
-    for i in range(len(a) - 1):
-        if i % 1000 == 0:
-            print(i, res)
-        if a[i] is None:
-            continue
-
-        s = set()
-        for url in a[i]:
-            s.update(b[url])
-
-        group = []
-        for j in s:
-            if j > i and a[j] and len(a[i].intersection(a[j])) >= power:
-                group.append(j)
-                a[j] = None
-        if group:
-            group.append(i)
-            res.append(group)
-    return res
-
-
-def hard_clusterization(a, power):
-    b = [set() for i in range(len(a))]
-
-    for i in range(len(a)):
-        for el in a[i]:
-            b[el].add(i)
-
-    res = dict()
-    for i in range(len(a) - 1):
-        if i % 1000 == 0:
-            print(i, res)
-
-        s = set()
-        for url in a[i]:
-            s.update(b[url])
-
-        for j in s:
-            if j > i:
-                intersect = a[i].intersection(a[j])
-                if len(intersect) >= power:
-                    urls = tuple(sorted(intersect))
-                    if urls in res:
-                        res[urls].update({i, j})
-                    else:
-                        res[urls] = {i, j}
-
-    print(res)
-    result = dict()
-    for key, value in res.items():
-        len_key = len(key)
-        if len_key in result:
-            result[len_key].update({key: value})
-        else:
-            result[len_key] = {key: value}
-    return result
-
-n = 100
-power = 4
-a = []
-
 seed()
-for _ in range(n):
-    s = set()
-    while len(s) < 10:
-        s.add(randint(0, n - 1))
-    a.append(s)
+array = [randint(0, 10) - 5 for i in range(10)]
+print(array)
+m, k = 0, 0
+res = array[0]
+for i in range(0, len(array)):
+    for j in range(i, len(array)):
+        if sum(array[i:j+1]) > res:
+            m, k = i, j
+            res = sum(array[i:j+1])
+print(m, k, res)
 
-print('-----------------------')
+# from random import randint, seed
+# from time import time
+#
+#
+# def var1(a, power):
+#     res = []
+#     for i in range(len(a) - 1):
+#         if i % 1000 == 0:
+#             print(i, res)
+#         if a[i] is None:
+#             continue
+#         group = []
+#         for j in range(i + 1, len(a)):
+#             if a[j] and len(a[i].intersection(a[j])) >= power:
+#                 group.append(j)
+#                 a[j] = None
+#         if group:
+#             group.append(i)
+#             res.append(group)
+#     return res
+#
+#
+# def soft_clusterization(a, power):
+#     b = [set() for i in range(len(a))]
+#
+#     for i in range(len(a)):
+#         for el in a[i]:
+#             b[el].add(i)
+#
+#     res = []
+#     for i in range(len(a) - 1):
+#         if i % 1000 == 0:
+#             print(i, res)
+#         if a[i] is None:
+#             continue
+#
+#         s = set()
+#         for url in a[i]:
+#             s.update(b[url])
+#
+#         group = []
+#         for j in s:
+#             if j > i and a[j] and len(a[i].intersection(a[j])) >= power:
+#                 group.append(j)
+#                 a[j] = None
+#         if group:
+#             group.append(i)
+#             res.append(group)
+#     return res
+#
+#
+# def hard_clusterization(a, power):
+#     b = [set() for i in range(len(a))]
+#
+#     for i in range(len(a)):
+#         for el in a[i]:
+#             b[el].add(i)
+#
+#     res = dict()
+#     for i in range(len(a) - 1):
+#         if i % 1000 == 0:
+#             print(i, res)
+#
+#         s = set()
+#         for url in a[i]:
+#             s.update(b[url])
+#
+#         for j in s:
+#             if j > i:
+#                 intersect = a[i].intersection(a[j])
+#                 if len(intersect) >= power:
+#                     urls = tuple(sorted(intersect))
+#                     if urls in res:
+#                         res[urls].update({i, j})
+#                     else:
+#                         res[urls] = {i, j}
+#
+#     print(res)
+#     result = dict()
+#     for key, value in res.items():
+#         len_key = len(key)
+#         if len_key in result:
+#             result[len_key].update({key: value})
+#         else:
+#             result[len_key] = {key: value}
+#     return result
+#
+# n = 400000
+# power = 4
+# a = []
+#
+# seed()
+# for _ in range(n):
+#     s = set()
+#     while len(s) < 10:
+#         s.add(randint(0, n - 1))
+#     a.append(s)
+#
+# print('-----------------------')
+# # c = a.copy()
+# # t = time()
+# # print(var1(c, power))
+# # print(time() - t)
+# print('-----------------------')
 # c = a.copy()
 # t = time()
-# print(var1(c, power))
+# soft_clusterization(c, power)
 # print(time() - t)
-print('-----------------------')
-c = a.copy()
-t = time()
-print(soft_clusterization(c, power))
-print(time() - t)
-print('-----------------------')
-c = a.copy()
-t = time()
-print(hard_clusterization(c, power))
-print(time() - t)
+# print('-----------------------')
+# c = a.copy()
+# t = time()
+# print(hard_clusterization(c, power))
+# print(time() - t)
 
 
 
