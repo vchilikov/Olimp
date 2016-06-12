@@ -1,0 +1,6 @@
+s = input()
+k = int(input())
+w = list(map(int, input().split()))
+result = sum(w[ord(ch) - ord('a')] * (i + 1) for i, ch in enumerate(s))
+result += sum(max(w) * i for i in range(len(s) + 1, len(s) + k + 1))
+print(result)
