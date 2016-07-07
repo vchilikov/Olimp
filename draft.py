@@ -1,15 +1,38 @@
-from random import randint, seed
-seed()
-array = [randint(0, 10) - 5 for i in range(10)]
-print(array)
-m, k = 0, 0
-res = array[0]
-for i in range(0, len(array)):
-    for j in range(i, len(array)):
-        if sum(array[i:j+1]) > res:
-            m, k = i, j
-            res = sum(array[i:j+1])
-print(m, k, res)
+from datetime import datetime
+
+
+def timer(k):
+    def wrapper1(f):
+        def wrapper2(*args, **kwargs):
+            t = datetime.now()
+            res = f(*args, **kwargs)
+            print(k * (datetime.now() - t))
+            return res
+        return wrapper2
+    return wrapper1
+
+@timer(10)
+def circle(l):
+    j = 1
+    for i in range(l):
+        j += 1
+
+circle(50000000)
+
+
+
+# from random import randint, seed
+# seed()
+# array = [randint(0, 10) - 5 for i in range(10)]
+# print(array)
+# m, k = 0, 0
+# res = array[0]
+# for i in range(0, len(array)):
+#     for j in range(i, len(array)):
+#         if sum(array[i:j+1]) > res:
+#             m, k = i, j
+#             res = sum(array[i:j+1])
+# print(m, k, res)
 
 # from random import randint, seed
 # from time import time
