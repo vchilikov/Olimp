@@ -1,23 +1,60 @@
 from datetime import datetime
+from random import randint
 
 
-def timer(k):
-    def wrapper1(f):
-        def wrapper2(*args, **kwargs):
-            t = datetime.now()
-            res = f(*args, **kwargs)
-            print(k * (datetime.now() - t))
-            return res
-        return wrapper2
-    return wrapper1
+def timer(f):
+    def wrapper(*args, **kwargs):
+        t = datetime.now()
+        res = f(*args, **kwargs)
+        print(datetime.now() - t)
+        return res
 
-@timer(10)
-def circle(l):
-    j = 1
-    for i in range(l):
-        j += 1
+    return wrapper
 
-circle(50000000)
+
+@timer
+def load_data():
+    max_int = 1000000
+    length = 30000000
+    array1 = [i % max_int for i in range(length)]
+    array2 = [i % max_int for i in range(length)]
+    array3 = [i % max_int for i in range(length)]
+    return array1, array2, array3
+
+@timer
+def unique_data(array1, array2, array3):
+    return list(set(array1 + array2 + array3))
+
+print('Загрузка данных')
+arr1, arr2, arr3 = load_data()
+print('Данные загружены')
+print('Обработка данных')
+arr = unique_data(arr1, arr2, arr3)
+print('Данные обработаны')
+
+
+
+
+# from datetime import datetime
+#
+#
+# def timer(k):
+#     def wrapper1(f):
+#         def wrapper2(*args, **kwargs):
+#             t = datetime.now()
+#             res = f(*args, **kwargs)
+#             print(k * (datetime.now() - t))
+#             return res
+#         return wrapper2
+#     return wrapper1
+#
+# @timer(10)
+# def circle(l):
+#     j = 1
+#     for i in range(l):
+#         j += 1
+#
+# circle(50000000)
 
 
 
