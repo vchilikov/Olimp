@@ -13,4 +13,27 @@ def primes(n):
     return sieve
 
 
-primes(1000000)
+@timer.timer
+def primes2(n):
+    arr = [True] * (n + 1)
+    sqrt_n = int(sqrt(n))
+    for i in range(2, sqrt_n + 1):
+        if arr[i]:
+            for j in range(i * i, n + 1, i):
+                arr[j] = False
+
+    result = []
+    for i in range(2, n + 1):
+        if arr[i]:
+            result.append(i)
+
+    return result
+
+
+n = 10000000
+
+res = primes(n)
+res2 = primes2(n)
+
+if res != set(res2):
+    print('Error')
