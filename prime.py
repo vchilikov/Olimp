@@ -30,10 +30,11 @@ def primes2(n):
     return result
 
 
-n = 10000000
+n = 50
 
 res = primes(n)
 res2 = primes2(n)
+print(res2)
 
 if res != set(res2):
     print('Error')
