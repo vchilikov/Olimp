@@ -1,0 +1,1 @@
+print('#Color' if set(''.join(input() for _ in range(int(input().split()[0]))))&set('CMY') else '#Black&White')
