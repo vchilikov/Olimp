@@ -1,0 +1,5 @@
+n, k = map(int, input().split())
+s = input()
+l, r = s.find('T'), s.find('G')
+l, r = min(l, r), max(l, r)
+print('YES' if '#' not in s[l + k:r:k] and (r - l) % k == 0 else 'NO')

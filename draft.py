@@ -1,38 +1,73 @@
-from datetime import datetime
-from random import randint
+# for i in range(3, 21):
+#     list_range = list(range(2, i))
+#     sum_range = sum(list_range)
+#     if sum_range >= 100:
+#         print('#{0}, sum={1}, {2}'.format(len(list_range), sum_range, list_range))
+#         break
+
+# name = input('Как тебя зовут? ')
+# while True:
+#     exit_name = input('Ты уходишь(да/нет)?')
+#     if exit_name.upper() == 'НЕТ' or exit_name.upper() == 'ДА':
+#         break
+# for i in range(5):
+#     if exit_name == 'нет':
+#         print('Приветстви #{num}. Привет, {name}!'.format(num=i, name=name))
+#     else:
+#         print('Прощание #{num}. Пока, {name}!'.format(num=i, name=name))
+#
 
 
-def timer(f):
-    def wrapper(*args, **kwargs):
-        t = datetime.now()
-        res = f(*args, **kwargs)
-        print(datetime.now() - t)
-        return res
 
-    return wrapper
+# class Infinity:
+#     def __init__(self):
+#         self.i = 0
+#
+#     def __iter__(self):
+#         return self
+#
+#     def __next__(self):
+#         self.i += 1
+#         return self.i
+#
+# for i in Infinity():
+#     print(i)
 
-
-@timer
-def load_data():
-    max_int = 1000000
-    length = 30000000
-    array1 = [i % max_int for i in range(length)]
-    array2 = [i % max_int for i in range(length)]
-    array3 = [i % max_int for i in range(length)]
-    return array1, array2, array3
-
-@timer
-def unique_data(array1, array2, array3):
-    return list(set(array1 + array2 + array3))
-
-print('Загрузка данных')
-arr1, arr2, arr3 = load_data()
-print('Данные загружены')
-print('Обработка данных')
-arr = unique_data(arr1, arr2, arr3)
-print('Данные обработаны')
-
-
+# from datetime import datetime
+# from random import randint
+#
+#
+# def timer(f):
+#     def wrapper(*args, **kwargs):
+#         t = datetime.now()
+#         res = f(*args, **kwargs)
+#         print(datetime.now() - t)
+#         return res
+#
+#     return wrapper
+#
+#
+# @timer
+# def load_data():
+#     max_int = 1000000
+#     length = 30000000
+#     array1 = [i % max_int for i in range(length)]
+#     array2 = [i % max_int for i in range(length)]
+#     array3 = [i % max_int for i in range(length)]
+#     return array1, array2, array3
+#
+# @timer
+# def unique_data(array1, array2, array3):
+#     return list(set(array1 + array2 + array3))
+#
+# print('Загрузка данных')
+# arr1, arr2, arr3 = load_data()
+# print('Данные загружены')
+# print('Обработка данных')
+# arr = unique_data(arr1, arr2, arr3)
+# print('Данные обработаны')
+#
+#
 
 
 # from datetime import datetime
