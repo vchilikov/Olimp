@@ -1,3 +1,40 @@
+li = [1]
+x = 1.5
+i = 0
+j = len(li) - 1
+m = int(j / 2)
+while li[m] != x and i < j:
+    if x > li[m]:
+        i = m + 1
+    else:
+        j = m - 1
+    m = int((i + j) / 2)
+
+if i > j:
+    print('Элемент не найден')
+else:
+    print('Индекс элемента: ', m)
+
+# def binary_search(arr, x):
+#     l, r = 0, len(arr) - 1
+#     if r < 0:
+#         return -1
+#     while (r - l) > 1:
+#         i = (l + r) // 2
+#         if x <= arr[i]:
+#             r = i
+#         else:
+#             l = i
+#     if arr[l] == x:
+#         return l
+#     elif arr[r] == x:
+#         return r
+#     else:
+#         return -1
+#
+#
+# print(binary_search([1, 1, 1, 1, 1, 1], 1))
+
 # for i in range(3, 21):
 #     list_range = list(range(2, i))
 #     sum_range = sum(list_range)
