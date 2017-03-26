@@ -1,19 +1,12 @@
-li = [1]
-x = 1.5
-i = 0
-j = len(li) - 1
-m = int(j / 2)
-while li[m] != x and i < j:
-    if x > li[m]:
-        i = m + 1
-    else:
-        j = m - 1
-    m = int((i + j) / 2)
+import dis
+import inspect
 
-if i > j:
-    print('Элемент не найден')
-else:
-    print('Индекс элемента: ', m)
+
+def f():
+    print('121212')
+
+print(dis.dis(f))
+
 
 # def binary_search(arr, x):
 #     l, r = 0, len(arr) - 1
