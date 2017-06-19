@@ -1,11 +1,92 @@
-import dis
-import inspect
+import re
+from bs4 import BeautifulSoup
+
+html_doc = """фывап https://music.yandex.ru/feed
+dfgdfg
+sdfasda https://music.yandex.ru/feed asdasd sadasdasd gdsf
+gsdfgs
+https://music.yandex.ru/feed
+<a href="http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC" target="_blank">http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC</a>
+dfsgsdfgsdfgsdsdfgsdfgdsfпап
+asdhttps://www.google.ru/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8 asdas
+asdasd<a href="http://google.com/problemset/page/3?order=BY_SOLVED_DESC" target="_blank">http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC</a>asdasd
+"""
 
 
-def f():
-    print('121212')
+html_doc = """
+фывап <a href="https://music.yandex.ru/feed" target="_blank">https://music.yandex.ru/feed</a>
+dfgdfg
+sdfasda <a href="https://music.yandex.ru/feed" target="_blank">https://music.yandex.ru/feed</a> asdasd sadasdasd gdsf
+gsdfgs
+<a href="https://music.yandex.ru/feed" target="_blank">https://music.yandex.ru/feed</a>
+<a href="http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC" target="_blank">http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC</a>
+dfsgsdfgsdfgsdsdfgsdfgdsfпап
+asd<a href="https://www.google.ru/webhp?sourceid=chrome-instant&amp;ion;=1&amp;espv;=2&amp;ie;=UTF-8" target="_blank">https://www.google.ru/webhp?sourceid=chrome-instant&amp;ion;=1&amp;espv;=2&amp;ie;=UTF-8</a> asdas
+asdasd<a href="http://google.com/problemset/page/3?order=BY_SOLVED_DESC" target="_blank">http://codeforces.com/problemset/page/3?order=BY_SOLVED_DESC</a>asdasd
+"""
+buff = []
+soup = BeautifulSoup(html_doc, 'html.parser')
+for i, el in enumerate(soup.find_all('a')):
+    buff.append(str(el))
+    el.replace_with('{link%i}' % i)
 
-print(dis.dis(f))
+html_doc = str(soup)
+print(html_doc)
+
+urls = re.compile(
+    r"(((http|ftp|https):\/{2})+(([0-9a-z_-]+\.)+(aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|cz|de|dj|dk|dm|do|dz|ec|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mn|mn|mo|mp|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|nom|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ra|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw|arpa)(:[0-9]+)?((\/([~0-9a-zA-Z\#\+\%@\.\/_-]+))?(\?[0-9a-zA-Z\+\%@\/&\[\];=_-]+)?)?))\b", re.MULTILINE | re.UNICODE)
+html_doc = urls.sub(r'<a href="\1" target="_blank">\1</a>', html_doc)
+
+for i, el in enumerate(buff):
+    html_doc = html_doc.replace('{link%i}' % i, el)
+
+print(html_doc)
+
+# s = """
+# server {
+#     listen       80;
+#     server_name  www.%s;
+#     return       301 http://%s$request_uri;
+# }
+# """
+# res = []
+# while True:
+#     host_name = input()
+#     if host_name == 'end':
+#         break
+#     res.append(s % (host_name, host_name))
+#
+# print("\n".join(res))
+
+
+# def b(**kwargs):
+#     print(kwargs)
+#
+# class Cls():
+#     a = b
+#
+# Cls.a(a=123)
+
+# from random import randint, seed
+# seed()
+# array = [randint(0, 10) - 5 for i in range(10)]
+# print(array)
+# m, k = 0, 0
+# res = array[0]
+# for i in range(0, len(array)):
+#     for j in range(i, len(array)):
+#         if sum(array[i:j+1]) > res:
+#             m, k = i, j
+#             res = sum(array[i:j+1])
+# print(m, k, res)
+# import dis
+# import inspect
+#
+#
+# def f():
+#     print('121212')
+#
+# print(dis.dis(f))
 
 
 # def binary_search(arr, x):
