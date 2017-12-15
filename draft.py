@@ -1,3 +1,35 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-2018-goda-moskva.html'
+months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
+          'dekabr']
+
+for month in months:
+    r = requests.get(url.format(month))
+    soup = BeautifulSoup(r.text, "html.parser")
+    table = soup.find('table', {'id': 'table'})
+    table_body = table.find('tbody')
+    rows = table_body.find_all('tr')
+    for row in rows:
+        cols = row.find_all('td')
+        cols = [ele.text.strip() for ele in cols]
+        print(cols)
+    break
+
+# a = [10, 5, 2,  3, 7, 5]
+# c = 12
+# s = {}
+# res = []
+# for i, el in enumerate(a):
+#     if c - el in s.keys():
+#         for j in s[c - el]:
+#             res.append((j, i))
+#     s[el] = s.get(el, []) + [i]
+#
+# l, r = min(res, key=lambda x: abs(x[0] - x[1]))
+# print(a[l], a[r])
+
 # import re
 # from bs4 import BeautifulSoup
 #
@@ -129,7 +161,6 @@
 #
 
 
-
 # class Infinity:
 #     def __init__(self):
 #         self.i = 0
@@ -201,7 +232,6 @@
 #         j += 1
 #
 # circle(50000000)
-
 
 
 # from random import randint, seed
@@ -330,20 +360,6 @@
 # t = time()
 # print(hard_clusterization(c, power))
 # print(time() - t)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # a = []
@@ -520,7 +536,6 @@
 #
 # print(list(c))
 #
-
 
 
 # def f(*args):
