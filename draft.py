@@ -2,37 +2,43 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import date
 
-url_template = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-2018-goda-moskva.html'
-months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
-          'dekabr']
+
+class MoonCalendarParser:
+    url_template = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-{1}-goda-moskva.html'
+    months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
+              'dekabr']
+
+    def __init__(self, year):
+        self.year = year
+
+    def urls(self):
+        return (self.url_template.format(month, self.year) for month in self.months)
+
+    def numbered_urls(self):
+        return zip(range(1, 13), self.urls())
+
+    @staticmethod
+    def load_table_rows_by_url(url):
+        r = requests.get(url)
+        soup = BeautifulSoup(r.text, "html.parser")
+        table = soup.find('table', {'id': 'table'})
+        table_body = table.find('tbody')
+        rows = table_body.find_all('tr')
+        for row in rows[1:]:
+            yield [td.text.strip() for td in row.find_all('td')]
+
+    def days_parser(self):
+        for month, url in self.numbered_urls():
+            for row in self.load_table_rows_by_url(url):
+                d = date(self.year, month, int(row[1]))
+                yield [d] + row[2:]
+
+    def parse(self):
+        for row in self.days_parser():
+            print(row[0].strftime('%d.%m.%Y'), row[1:])
 
 
-def month_url_generator():
-    for i, month_name in enumerate(months):
-        url = url_template.format(month_name)
-        month = i + 1
-        yield month, url
-
-
-def row_by_url_generator(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.text, "html.parser")
-    table = soup.find('table', {'id': 'table'})
-    table_body = table.find('tbody')
-    rows = table_body.find_all('tr')
-    for row in rows[1:]:
-        yield [td.text.strip() for td in row.find_all('td')]
-
-
-def days_parser():
-    for month, url in month_url_generator():
-        for row in row_by_url_generator(url):
-            d = date(2018, month, int(row[1]))
-            yield [d] + row[2:]
-
-
-for row in days_parser():
-    print(row[0].strftime('%d.%m.%Y'), row[1:])
+MoonCalendarParser(2018).parse()
 
 # a = [10, 5, 2,  3, 7, 5]
 # c = 12
