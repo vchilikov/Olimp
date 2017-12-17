@@ -1,21 +1,38 @@
 import requests
 from bs4 import BeautifulSoup
+from datetime import date
 
-url = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-2018-goda-moskva.html'
+url_template = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-2018-goda-moskva.html'
 months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
           'dekabr']
 
-for month in months:
-    r = requests.get(url.format(month))
+
+def month_url_generator():
+    for i, month_name in enumerate(months):
+        url = url_template.format(month_name)
+        month = i + 1
+        yield month, url
+
+
+def row_by_url_generator(url):
+    r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
     table = soup.find('table', {'id': 'table'})
     table_body = table.find('tbody')
     rows = table_body.find_all('tr')
-    for row in rows:
-        cols = row.find_all('td')
-        cols = [ele.text.strip() for ele in cols]
-        print(cols)
-    break
+    for row in rows[1:]:
+        yield [td.text.strip() for td in row.find_all('td')]
+
+
+def days_parser():
+    for month, url in month_url_generator():
+        for row in row_by_url_generator(url):
+            d = date(2018, month, int(row[1]))
+            yield [d] + row[2:]
+
+
+for row in days_parser():
+    print(row[0].strftime('%d.%m.%Y'), row[1:])
 
 # a = [10, 5, 2,  3, 7, 5]
 # c = 12
