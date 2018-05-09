@@ -1,44 +1,121 @@
-import requests
-from bs4 import BeautifulSoup
-from datetime import date
+from inspect import getgeneratorstate
+import asyncio
 
 
-class MoonCalendarParser:
-    url_template = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-{1}-goda-moskva.html'
-    months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
-              'dekabr']
-
-    def __init__(self, year):
-        self.year = year
-
-    def urls(self):
-        return (self.url_template.format(month, self.year) for month in self.months)
-
-    def numbered_urls(self):
-        return zip(range(1, 13), self.urls())
-
-    @staticmethod
-    def load_table_rows_by_url(url):
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, "html.parser")
-        table = soup.find('table', {'id': 'table'})
-        table_body = table.find('tbody')
-        rows = table_body.find_all('tr')
-        for row in rows[1:]:
-            yield [td.text.strip() for td in row.find_all('td')]
-
-    def days_parser(self):
-        for month, url in self.numbered_urls():
-            for row in self.load_table_rows_by_url(url):
-                d = date(self.year, month, int(row[1]))
-                yield [d] + row[2:]
-
-    def parse(self):
-        for row in self.days_parser():
-            print(row[0].strftime('%d.%m.%Y'), row[1:])
 
 
-MoonCalendarParser(2018).parse()
+class DemoException(Exception):
+    """DemoException"""
+
+
+def coro(f):
+    def wrap(*args, **kwargs):
+        g = f(*args, **kwargs)
+        next(g)
+        return g
+
+    return wrap
+
+
+@asyncio.coroutine
+def avg():
+    count = 0
+    sum = 0
+    avg = None
+    while True:
+        try:
+            a = yield avg, count
+        except DemoException:
+            print('DemoException')
+            continue
+        finally:
+            print("finally")
+
+        count += 1
+        sum += a
+        avg = sum / count
+
+
+g = avg()
+next(g)
+print(g)
+print(getgeneratorstate(g))
+print(g.send(10))
+print(g.send(20))
+g.throw(DemoException)
+print(g.send(20))
+print(getgeneratorstate(g))
+
+# import aiohttp
+# import asyncio
+# import time
+# sem = asyncio.Semaphore(5)
+#
+#
+# async def fetch(url):
+#     async with sem:
+#         print(url)
+#         t = time.time()
+#         async with aiohttp.ClientSession() as session:
+#             async with session.get(url) as response:
+#                 print(response.status)
+#         print((time.time() - t))
+#
+# pik_url = 'http://ugradirect.ru/?asdf={0}'
+#
+#
+# async def main(loop):
+#     await asyncio.wait([fetch(pik_url.format(i)) for i in range(100)])
+#
+#
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(main(loop))
+
+# import math
+#
+# for i in range(10000000000):
+#     math.sqrt(i)
+# import requests
+# from bs4 import BeautifulSoup
+# from datetime import date
+#
+#
+# class MoonCalendarParser:
+#     url_template = 'http://luna.rio-mix.com/lunnyj-kalendar-na-{0}-{1}-goda-moskva.html'
+#     months = ['yanvar', 'fevral', 'mart', 'aprel', 'maj', 'iyun', 'iyul', 'avgust', 'sentyabr', 'oktyabr', 'noyabr',
+#               'dekabr']
+#
+#     def __init__(self, year):
+#         self.year = year
+#
+#     def urls(self):
+#         return (self.url_template.format(month, self.year) for month in self.months)
+#
+#     def numbered_urls(self):
+#         return zip(range(1, 13), self.urls())
+#
+#     @staticmethod
+#     def load_table_rows_by_url(url):
+#         r = requests.get(url)
+#         soup = BeautifulSoup(r.text, "html.parser")
+#         table = soup.find('table', {'id': 'table'})
+#         table_body = table.find('tbody')
+#         rows = table_body.find_all('tr')
+#         for row in rows[1:]:
+#             yield [td.text.strip() for td in row.find_all('td')]
+#
+#     def days_parser(self):
+#         for month, url in self.numbered_urls():
+#             for row in self.load_table_rows_by_url(url):
+#                 d = date(self.year, month, int(row[1]))
+#                 yield [d] + row[2:]
+#
+#     def parse(self):
+#         for row in self.days_parser():
+#             print(row[0].strftime('%d.%m.%Y'), row[1:])
+#
+#
+# MoonCalendarParser(2018).parse()
 
 # a = [10, 5, 2,  3, 7, 5]
 # c = 12
