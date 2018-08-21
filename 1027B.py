@@ -1,10 +1,11 @@
 n, q = map(int, input().split())
-res = []
+results = []
 for _ in range(q):
     x, y = map(int, input().split())
-    if (y - x % 2) % 2 == 0:
-        res.append(str((x // 2) * ((n + 1) // 2) + ((x - 1) // 2) * (n // 2) + (y + x % 2) // 2))
+    if (y - x % 2) % 2:
+        res = (x // 2) * (n // 2) + ((x - 1) // 2) * ((n + 1) // 2) + (y + (x + 1) % 2) // 2 + (n * n + 1) // 2
     else:
-        res.append(str((n * n + 1) // 2 + (x // 2) * (n // 2) + ((x - 1) // 2) * ((n + 1) // 2) + (y + (x + 1) % 2) // 2))
+        res = (x // 2) * ((n + 1) // 2) + ((x - 1) // 2) * (n // 2) + (y + x % 2) // 2
+    results.append(str(res))
 
-print('\n'.join(res))
+print('\n'.join(results))
