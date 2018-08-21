@@ -1,50 +1,228 @@
-from inspect import getgeneratorstate
-import asyncio
+import random
+
+random.seed(100)
 
 
+def _quick_sort(arr, left, right):
+    if right - left + 1 <= 1:
+        return
+    m = left + (right - left + 1) // 2
+    i, j = left, right
+    while i < j:
+        while arr[i] <= arr[m] and i < m:
+            i += 1
+        arr[i], arr[m] = arr[m], arr[i]
+        m = i
+
+        while arr[j] >= arr[m] and i < j:
+            j -= 1
+
+        arr[j], arr[m] = arr[m], arr[j]
+        m = j
+
+    _quick_sort(arr, left, i - 1)
+    _quick_sort(arr, i, right)
 
 
-class DemoException(Exception):
-    """DemoException"""
+def quick_sort(arr):
+    res = arr[:]
+    _quick_sort(res, 0, len(res) - 1)
+    return res
 
 
-def coro(f):
-    def wrap(*args, **kwargs):
-        g = f(*args, **kwargs)
-        next(g)
-        return g
+if __name__ == "__main__":
+    print(quick_sort([]))
+    print(quick_sort([1]))
+    print(quick_sort([1, 1]))
+    for i in range(100):
+        arr = [random.randint(0, 10) for j in range(i)]
+        res1 = quick_sort(arr)
+        res2 = sorted(arr)
+        print(res1 == res2, res1)
+        if res1 != res2:
+            print('!' * 100)
 
-    return wrap
+# class A:
+#     def __init__(self):
+#         print('init')
+#         print(self.m)
+#
+#     @property
+#     def m(self):
+#         return 'm'
+#
+#
+# a = A()
+
+# from random import randint, seed
+# seed()
+# res = ['PS Vita', 'Bobby', 'Smart Watch'][randint(0, 2)]
+# print(res)
 
 
-@asyncio.coroutine
-def avg():
-    count = 0
-    sum = 0
-    avg = None
-    while True:
-        try:
-            a = yield avg, count
-        except DemoException:
-            print('DemoException')
-            continue
-        finally:
-            print("finally")
+# print(sum(range(1, 101)))
 
-        count += 1
-        sum += a
-        avg = sum / count
-
-
-g = avg()
-next(g)
-print(g)
-print(getgeneratorstate(g))
-print(g.send(10))
-print(g.send(20))
-g.throw(DemoException)
-print(g.send(20))
-print(getgeneratorstate(g))
+# from heapq import heapify, heappop, heappush
+# from random import randint
+#
+#
+# def merge(*seqs):
+#     """Объединяет последовательности сетей
+#
+#     Элемент seqs это итератор таплов (ip_from, ip_to, priority, rest)
+#
+#     ip_from, ip_to: целочисленное (порядок байт хоста) представление ip
+#     priority: приоритет блока, чем меньше значение, тем выше приоритет
+#     rest: оставшиеся произвольные данные
+#
+#     Пересекающиеся блоки бьются на части согласно приоритетам.
+#
+#     Блоки с меньшим приоритетом перекрываются блоками с большим.
+#
+#     Если у блоков одинаковый приоритет, то пересекающаяся часть
+#     берется из первого (в порядке следования).
+#
+#     Например:
+#
+#         c = [1, 10, 1] # ip_from, ip_to, priority
+#         n = [5, 15, 0]
+#         Будут разбиты на: [1, 4] [5, 15]
+#
+#         c = [1, 10, 0]
+#         n = [5, 15, 1]
+#         Будут разбиты на: [1, 10] [11, 15]
+#
+#         c = [1, 10, 0]
+#         n = [5, 15, 0]
+#         Будут разбиты на: [1, 10] [11, 15]
+#     """
+#     heap = []
+#     for s in seqs:
+#
+#         for f, t, p, r in s:
+#             heap.append((f, t, p, r, s))
+#             break
+#
+#     heapify(heap)
+#
+#     def next():
+#         """Получает наименьший блок из кучи
+#
+#         И помещает в кучу очередной блок из соответствующего итератора
+#         """
+#         cf, ct, cp, cr, it = heappop(heap)
+#         for f, t, p, r in it:
+#             heappush(heap, (f, t, p, r, it))
+#             break
+#
+#         return cf, ct, cp, cr, it
+#
+#     while heap:
+#         # На каждой итерации из кучи берутся два наименьших блока: c и n
+#         c = next()
+#
+#         try:
+#             n = next()
+#         except IndexError:
+#             yield c
+#             break
+#
+#         if c[1] < n[0]:  # Блок полностью левее
+#             yield c
+#             heappush(heap, n)
+#         elif c[0] == n[0] and c[1] == n[1]:  # Блоки совпадают
+#             if n[2] < c[2]:
+#                 heappush(heap, n)
+#             else:
+#                 heappush(heap, c)
+#         else:  # Блоки пересекаются
+#             if n[2] < c[2]:
+#                 if c[0] < n[0]:
+#                     heappush(heap, (c[0], n[0] - 1) + c[2:])
+#
+#                 heappush(heap, n)
+#
+#                 if n[1] < c[1]:
+#                     heappush(heap, (n[1] + 1, c[1]) + c[2:])
+#
+#             else:
+#                 heappush(heap, c)
+#                 if c[1] < n[1]:
+#                     heappush(heap, (c[1] + 1, n[1]) + n[2:])
+#
+#
+# def rand10():
+#     return randint(1, 11)
+#
+#
+# def blocks_gen(cnt, priority):
+#     g1 = []
+#     start = rand10()
+#     last = start + rand10()
+#     for i in range(cnt):
+#         yield (start, last, priority, None)
+#         start = last + rand10()
+#         last = start + rand10()
+#
+#     return g1
+#
+#
+# def my_merge(l1, l2):
+#     result = []
+#     next_l1 = None
+#     next_l2 = None
+#     i, j = 0, 0
+#     while i < len(l1) or j < len(l2) or next_l1 or next_l2:
+#         if not next_l1 and i < len(l1):
+#             next_l1 = l1[i]
+#             i += 1
+#         if not next_l2 and j < len(l2):
+#             next_l2 = l2[j]
+#             j += 1
+#         if next_l1 and not next_l2:
+#             result.append(next_l1)
+#             next_l1 = None
+#             continue
+#
+#         if next_l2 and not next_l1:
+#             result.append(next_l2)
+#             next_l2 = None
+#             continue
+#
+#         if next_l1[0] < next_l2[0] and next_l1[1] < next_l2[0]:
+#             result.append(next_l1)
+#             next_l1 = None
+#             continue
+#
+#         if next_l2[0] < next_l1[0] and next_l2[1] < next_l1[0]:
+#             result.append(next_l2)
+#             next_l2 = None
+#             continue
+#
+#         if next_l1[0] <= next_l2[0] and next_l1[1] >= next_l2[1]:
+#             result.append(next_l1)
+#             next_l1 = None
+#             next_l2 = None
+#             continue
+#
+#         if next_l1[0] <= next_l2[0] and next_l1[1] < next_l2[1]:
+#             result.append(next_l1)
+#             next_l2 = (next_l1[1] + 1, next_l2[1], next_l2[2], next_l2[3])
+#             continue
+#
+#         if next_l1[0] > next_l2[0] and next_l1[1] < next_l2[1]:
+#             result.append((next_l2[0], next_l1[0] - 1, next_l2[2], next_l2[3]))
+#             next_l2[0] = (next_l1[0], next_l2[1], next_l2[2], next_l2[3])
+#             continue
+#
+#     return result
+#
+# l1 = list(blocks_gen(2, 0))
+# l2 = list(blocks_gen(2, 1))
+# print(l1)
+# print(l2)
+# print([r[:4] for r in merge(iter(l1), iter(l2))])
+# print(my_merge(l1, l2))
 
 # import aiohttp
 # import asyncio
