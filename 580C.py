@@ -2,30 +2,29 @@ from collections import defaultdict
 
 n, m = map(int, input().split())
 a = list(map(int, input().split()))
-b = [0] * n
-d = defaultdict(set)
 
+graph = defaultdict(set)
 for i in range(n - 1):
-    x, y = map(lambda x: int(x) - 1, input().split())
-    d[x].add(y)
-    d[y].add(x)
+    x, y = map(int, input().split())
+    graph[x - 1].add(y - 1)
+    graph[y - 1].add(x - 1)
 
-cnt = 0
-s = {0}
-b[0] = a[0]
-processed = set()
-while s:
-    processed.update(s)
-    new_s = set()
-    for el in s:
-        children = d[el] - processed
+result = 0
+row = {0}
+prev_row = set()
+while row:
+    new_row = set()
+    for el in row:
+        children = graph[el] - prev_row
         if children:
             for next_el in children:
-                b[next_el] = b[el] + 1 if a[next_el] else 0
-                if b[next_el] <= m:
-                    new_s.add(next_el)
-        elif b[el] <= m:
-            cnt += 1
+                if a[next_el]:
+                    a[next_el] = a[el] + 1
+                if a[next_el] <= m:
+                    new_row.add(next_el)
+        elif a[el] <= m:
+            result += 1
+    prev_row = row
+    row = new_row
 
-    s = new_s
-print(cnt)
+print(result)
