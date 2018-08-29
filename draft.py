@@ -1,22 +1,64 @@
-import requests
-from datetime import datetime, timedelta
+import math
 
-cnt = 0
-while True:
-    cnt += 1
-    if cnt % 100 == 0:
-        print(cnt)
-    start = datetime.now()
-    # r = requests.get('https://weather.rambler.ru/health/')
-    # cookies = {'react_split': '1'}
-    # r = requests.get('https://weather.rambler.ru/heartbeat.json', cookies=cookies)
-    r = requests.get('https://weather.rambler.ru/api/v3/mixin/?url_path=v-tveri')
-    # r = requests.get('http://stage.weather.rambler.ru/api/v3/mixin/?format=json&url_path=v-tveri')
-    # r = requests.get('https://api.weather.rambler.ru/api/v3/mixin/?profile_token=dlweuhskdjfdffoiwehfpiuwhefdpiwhefduph&profile')
-    now = datetime.now()
-    if now - start > timedelta(seconds=0.5):
-        print(now - start)
-        # print(r.text)
+from scipy.stats import truncnorm
+from sqlalchemy import Column, Integer, Text, Numeric
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
+def get_truncated_normal(mean=50, sd=12, low=1, upp=99, count=1000):
+    x = truncnorm((low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)
+    for el in x.rvs(count):
+        yield math.trunc(round(el))
+
+
+engine = create_engine('sqlite:///:memory:', echo=False)
+Session = sessionmaker(bind=engine)
+session = Session()
+Base = declarative_base()
+
+
+class Banner(Base):
+    __tablename__ = 'banners'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    weight = Column(Numeric())
+
+
+Base.metadata.create_all(engine)
+
+
+for i in range(0, 1000):
+    buff = []
+    for weight in get_truncated_normal():
+        buff.append(Banner(name='asdf', weight=weight))
+    session.bulk_save_objects(buff)
+
+
+our_banner = session.query(Banner).filter_by(name='asdf').first()
+print(our_banner.name)
+
+
+# import requests
+# from datetime import datetime, timedelta
+#
+# cnt = 0
+# while True:
+#     cnt += 1
+#     if cnt % 100 == 0:
+#         print(cnt)
+#     start = datetime.now()
+#     # r = requests.get('https://weather.rambler.ru/health/')
+#     # cookies = {'react_split': '1'}
+#     # r = requests.get('https://weather.rambler.ru/heartbeat.json', cookies=cookies)
+#     r = requests.get('https://weather.rambler.ru/api/v3/mixin/?url_path=v-tveri')
+#     # r = requests.get('http://stage.weather.rambler.ru/api/v3/mixin/?format=json&url_path=v-tveri')
+#     # r = requests.get('https://api.weather.rambler.ru/api/v3/mixin/?profile_token=dlweuhskdjfdffoiwehfpiuwhefdpiwhefduph&profile')
+#     now = datetime.now()
+#     if now - start > timedelta(seconds=0.5):
+#         print(now - start)
+#         # print(r.text)
 
 # import aiohttp
 # import asyncio
