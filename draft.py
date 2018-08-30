@@ -1,22 +1,24 @@
-import requests
-from datetime import datetime, timedelta
 
-cnt = 0
-while True:
-    cnt += 1
-    if cnt % 100 == 0:
-        print(cnt)
-    start = datetime.now()
-    # r = requests.get('https://weather.rambler.ru/health/')
-    # cookies = {'react_split': '1'}
-    # r = requests.get('https://weather.rambler.ru/heartbeat.json', cookies=cookies)
-    r = requests.get('https://weather.rambler.ru/api/v3/mixin/?url_path=v-tveri')
-    # r = requests.get('http://stage.weather.rambler.ru/api/v3/mixin/?format=json&url_path=v-tveri')
-    # r = requests.get('https://api.weather.rambler.ru/api/v3/mixin/?profile_token=dlweuhskdjfdffoiwehfpiuwhefdpiwhefduph&profile')
-    now = datetime.now()
-    if now - start > timedelta(seconds=0.5):
-        print(now - start)
-        # print(r.text)
+
+# import requests
+# from datetime import datetime, timedelta
+#
+# cnt = 0
+# while True:
+#     cnt += 1
+#     if cnt % 100 == 0:
+#         print(cnt)
+#     start = datetime.now()
+#     # r = requests.get('https://weather.rambler.ru/health/')
+#     # cookies = {'react_split': '1'}
+#     # r = requests.get('https://weather.rambler.ru/heartbeat.json', cookies=cookies)
+#     r = requests.get('https://weather.rambler.ru/api/v3/mixin/?url_path=v-tveri')
+#     # r = requests.get('http://stage.weather.rambler.ru/api/v3/mixin/?format=json&url_path=v-tveri')
+#     # r = requests.get('https://api.weather.rambler.ru/api/v3/mixin/?profile_token=dlweuhskdjfdffoiwehfpiuwhefdpiwhefduph&profile')
+#     now = datetime.now()
+#     if now - start > timedelta(seconds=0.5):
+#         print(now - start)
+#         print(r.text)
 
 # import aiohttp
 # import asyncio
